@@ -88,16 +88,16 @@ const Navbar = ({ theme, toggleTheme }) => {
         <div className="flex items-center gap-2 md:gap-4">
           <button 
             onClick={toggleTheme} 
-            className={`p-2 rounded-full transition-colors ${theme === 'light' ? 'bg-white shadow-md hover:bg-white/80' : 'hover:bg-white/10'}`}
+            className="p-2 rounded-full transition-colors hover:bg-black/10"
             aria-label="Toggle Theme"
           >
             {theme === 'dark' 
               ? <Sun size={20} className="text-textMain" /> 
-              : <Moon size={20} className="text-textMain" />
+              : <Moon size={20} className="text-[#111111]" />
             }
           </button>
-          <button className="md:hidden p-2 rounded-full transition-colors hover:bg-black/10" onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>
-            <Menu size={20} className="text-textMain" />
+          <button className="md:hidden p-2 rounded-full transition-colors hover:bg-white/10" onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>
+            <Menu size={20} className="text-white" />
           </button>
         </div>
       </nav>
