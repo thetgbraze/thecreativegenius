@@ -23,6 +23,9 @@ const Navbar = ({ theme, toggleTheme }) => {
       const diff = currentY - lastScrollY.current;
       if (Math.abs(diff) < 2) return; // ignore micro-jitter
 
+      // Close mobile menu immediately on scroll
+      setMobileMenuOpen(false);
+
       const isMobile = window.innerWidth <= 768 || 'ontouchstart' in window;
       const newDir = diff > 0 ? 'down' : 'up';
       isScrolling.current = true;
