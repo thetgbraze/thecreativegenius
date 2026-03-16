@@ -9,8 +9,25 @@ gsap.registerPlugin(ScrollTrigger);
 const Navbar = ({ theme, toggleTheme }) => {
   const navRef = useRef(null);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [isVisible, setIsVisible] = useState(true);
   
   useEffect(() => {
+    const handleScroll = () => {
+      if (window.scrollY > 50) {
+        setIsVisible(false);
+        // Optional: close mobile menu on scroll, but keeping it per request logic
+      } else {
+        setIsVisible(true);
+      }
+    };
+
+    const handleClick = () => {
+      setIsVisible(true);
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    window.addEventListener('click', handleClick);
+
     const ctx = gsap.context(() => {
       ScrollTrigger.create({
         start: 'top -10%',
@@ -18,12 +35,16 @@ const Navbar = ({ theme, toggleTheme }) => {
         toggleClass: { className: 'nav-scrolled', targets: navRef.current },
       });
     });
-    return () => ctx.revert();
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener('click', handleClick);
+      ctx.revert();
+    };
   }, []);
 
   return (
     <>
-      <nav ref={navRef} className="fixed top-4 md:top-6 left-1/2 -translate-x-1/2 z-50 w-[95%] md:w-auto max-w-7xl transition-all duration-500 ease-[cubic-bezier(0.25,0.46,0.45,0.94)] px-6 md:px-8 py-3 md:py-4 rounded-full flex items-center justify-between md:justify-center gap-4 md:gap-12 text-textMain [&.nav-scrolled]:bg-background/10 [&.nav-scrolled]:backdrop-blur-xl [&.nav-scrolled]:border [&.nav-scrolled]:border-textMain/10">
+      <nav ref={navRef} className={`fixed top-4 md:top-6 left-1/2 -translate-x-1/2 z-50 w-[95%] md:w-auto max-w-7xl transition-all duration-500 ease-[cubic-bezier(0.25,0.46,0.45,0.94)] px-6 md:px-8 py-3 md:py-4 rounded-full flex items-center justify-between md:justify-center gap-4 md:gap-12 text-textMain [&.nav-scrolled]:bg-background/10 [&.nav-scrolled]:backdrop-blur-xl [&.nav-scrolled]:border [&.nav-scrolled]:border-textMain/10 ${isVisible ? 'translate-y-0 opacity-100' : '-translate-y-[250%] opacity-0 pointer-events-none'}`}>
         <div className="font-heading font-bold text-lg md:text-xl tracking-tight uppercase tracking-wider text-accent">The Creative Genius</div>
         <div className="hidden md:flex items-center gap-8 font-heading text-sm font-medium">
           <a href="#podcast" className="hover:text-accent transition-colors">Podcast</a>
@@ -45,7 +66,7 @@ const Navbar = ({ theme, toggleTheme }) => {
       </nav>
       {/* Mobile Menu Overlay */}
       <div 
-        className={`fixed inset-0 bg-background/95 backdrop-blur-md z-40 transition-opacity duration-300 md:hidden flex flex-col items-center justify-center gap-8 ${mobileMenuOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'}`}
+        className={`fixed inset-0 bg-background/95 backdrop-blur-md z-40 transition-all duration-300 md:hidden flex flex-col items-center justify-center gap-8 ${mobileMenuOpen && isVisible ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'}`}
         onClick={() => setMobileMenuOpen(false)}
       >
         <div className="flex flex-col items-center justify-center gap-8" onClick={(e) => e.stopPropagation()}>
