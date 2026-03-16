@@ -512,7 +512,17 @@ const Footer = () => {
 };
 
 export default function App() {
-  const [theme, setTheme] = useState('light');
+  // 1. Check localStorage first (user's saved choice)
+  // 2. Fall back to OS/browser preference
+  // 3. Default to 'light' if neither is set
+  const getInitialTheme = () => {
+    const saved = localStorage.getItem('tcg-theme');
+    if (saved) return saved;
+    if (window.matchMedia('(prefers-color-scheme: dark)').matches) return 'dark';
+    return 'light';
+  };
+
+  const [theme, setTheme] = useState(getInitialTheme);
 
   useEffect(() => {
     if (theme === 'light') {
@@ -520,6 +530,8 @@ export default function App() {
     } else {
       document.documentElement.classList.remove('light');
     }
+    // Persist the choice
+    localStorage.setItem('tcg-theme', theme);
   }, [theme]);
 
   const toggleTheme = () => {
