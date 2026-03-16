@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { ArrowRight, MousePointer2, Mic2, ActivityIcon, Sun, Moon, Menu } from 'lucide-react';
-import heroBg from './assets/hero.png';
+import kigaliBg from './assets/kigali-bg.png';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -14,69 +14,53 @@ const Navbar = ({ theme, toggleTheme }) => {
   const lastScrollY = useRef(window.scrollY);
   const lastScrollDir = useRef(null); // 'up' | 'down'
   const isScrolling = useRef(false);
-  const scrollTimer = useRef(null);
-  const autoHideTimer = useRef(null);
-
-  const showNavFor1s = () => {
-    setIsVisible(true);
-    clearTimeout(autoHideTimer.current);
-    autoHideTimer.current = setTimeout(() => {
-      // Only auto-hide if we're not actively scrolling
-      if (!isScrolling.current) {
-        setIsVisible(false);
-      }
-    }, 1000);
-  };
+  const scrollStopTimer = useRef(null);
+  const dirChangeLockTimer = useRef(null);
 
   useEffect(() => {
     const handleScroll = () => {
       const currentY = window.scrollY;
       const diff = currentY - lastScrollY.current;
-      if (Math.abs(diff) < 2) return; // ignore tiny jitter
+      if (Math.abs(diff) < 2) return; // ignore micro-jitter
 
       const newDir = diff > 0 ? 'down' : 'up';
+      isScrolling.current = true;
 
-      if (newDir !== lastScrollDir.current) {
-        // Direction changed — show for 1s flash then hide again
+      if (newDir !== lastScrollDir.current && lastScrollDir.current !== null) {
+        // Direction changed — show nav briefly, but hide again once scrolling continues
         setIsVisible(true);
-        clearTimeout(autoHideTimer.current);
-        autoHideTimer.current = setTimeout(() => {
-          setIsVisible(false);
-        }, 1000);
+        clearTimeout(dirChangeLockTimer.current);
+        // After 600ms of continued scrolling in new direction, hide again
+        dirChangeLockTimer.current = setTimeout(() => {
+          if (isScrolling.current) setIsVisible(false);
+        }, 600);
       } else {
-        // Same direction, keep it hidden
+        // Continuing in same direction — keep nav hidden
         setIsVisible(false);
-        clearTimeout(autoHideTimer.current);
       }
 
       lastScrollDir.current = newDir;
       lastScrollY.current = currentY;
 
-      // Mark as actively scrolling
-      isScrolling.current = true;
-      clearTimeout(scrollTimer.current);
-      scrollTimer.current = setTimeout(() => {
+      // Detect scroll stop: when scroll events stop firing, show nav permanently
+      clearTimeout(scrollStopTimer.current);
+      scrollStopTimer.current = setTimeout(() => {
         isScrolling.current = false;
+        lastScrollDir.current = null; // reset direction so next scroll tracks fresh
+        setIsVisible(true);
       }, 200);
     };
 
-    // Non-scroll interactions: show for 1s
-    const handlePointer = () => {
+    // Non-scroll interaction while nav is hidden → show it, stays visible until scroll
+    const handleInteraction = () => {
       if (!isScrolling.current) {
-        showNavFor1s();
-      }
-    };
-
-    const handleTouch = () => {
-      if (!isScrolling.current) {
-        showNavFor1s();
+        setIsVisible(true);
       }
     };
 
     window.addEventListener('scroll', handleScroll, { passive: true });
-    window.addEventListener('click', handlePointer);
-    window.addEventListener('pointermove', handlePointer);
-    window.addEventListener('touchstart', handleTouch, { passive: true });
+    window.addEventListener('click', handleInteraction);
+    window.addEventListener('touchstart', handleInteraction, { passive: true });
 
     const ctx = gsap.context(() => {
       ScrollTrigger.create({
@@ -87,11 +71,10 @@ const Navbar = ({ theme, toggleTheme }) => {
     });
     return () => {
       window.removeEventListener('scroll', handleScroll);
-      window.removeEventListener('click', handlePointer);
-      window.removeEventListener('pointermove', handlePointer);
-      window.removeEventListener('touchstart', handleTouch);
-      clearTimeout(scrollTimer.current);
-      clearTimeout(autoHideTimer.current);
+      window.removeEventListener('click', handleInteraction);
+      window.removeEventListener('touchstart', handleInteraction);
+      clearTimeout(scrollStopTimer.current);
+      clearTimeout(dirChangeLockTimer.current);
       ctx.revert();
     };
   }, []);
@@ -164,7 +147,7 @@ const Hero = () => {
   return (
     <section ref={containerRef} className="relative h-[100dvh] w-full overflow-hidden flex items-end pb-24 px-8 md:px-24">
       <div className="absolute inset-0 z-0">
-        <img src="https://images.unsplash.com/photo-1695277123951-e1cc156094cf?q=80&w=2574&auto=format&fit=crop" alt="Hero background Kigali" className="w-full h-full object-cover grayscale opacity-80" />
+        <img src={kigaliBg} alt="Aerial view of Kigali Rwanda" className="w-full h-full object-cover opacity-80" />
         <div className="absolute inset-0 bg-gradient-to-t from-background via-background/80 to-transparent"></div>
       </div>
       
