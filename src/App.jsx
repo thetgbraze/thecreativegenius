@@ -23,31 +23,39 @@ const Navbar = ({ theme, toggleTheme }) => {
       const diff = currentY - lastScrollY.current;
       if (Math.abs(diff) < 2) return; // ignore micro-jitter
 
+      const isMobile = window.innerWidth <= 768 || 'ontouchstart' in window;
       const newDir = diff > 0 ? 'down' : 'up';
       isScrolling.current = true;
 
       if (newDir !== lastScrollDir.current && lastScrollDir.current !== null) {
-        // Direction changed — show nav briefly, but hide again once scrolling continues
-        setIsVisible(true);
-        clearTimeout(dirChangeLockTimer.current);
-        // After 600ms of continued scrolling in new direction, hide again
-        dirChangeLockTimer.current = setTimeout(() => {
-          if (isScrolling.current) setIsVisible(false);
-        }, 600);
+        // Direction changed — show briefly on desktop only
+        if (!isMobile) {
+          setIsVisible(true);
+          clearTimeout(dirChangeLockTimer.current);
+          dirChangeLockTimer.current = setTimeout(() => {
+            if (isScrolling.current) setIsVisible(false);
+          }, 600);
+        } else {
+          // On mobile: hide immediately, no flash
+          setIsVisible(false);
+        }
       } else {
-        // Continuing in same direction — keep nav hidden
+        // Same direction — hide
         setIsVisible(false);
       }
 
       lastScrollDir.current = newDir;
       lastScrollY.current = currentY;
 
-      // Detect scroll stop: when scroll events stop firing, show nav permanently
+      // Scroll stop timer
       clearTimeout(scrollStopTimer.current);
       scrollStopTimer.current = setTimeout(() => {
         isScrolling.current = false;
-        lastScrollDir.current = null; // reset direction so next scroll tracks fresh
-        setIsVisible(true);
+        lastScrollDir.current = null;
+        // On desktop only: auto-show nav after scroll stops
+        if (window.innerWidth > 768 && !('ontouchstart' in window)) {
+          setIsVisible(true);
+        }
       }, 200);
     };
 
