@@ -56,24 +56,7 @@ const Navbar = ({ theme, toggleTheme }) => {
       }, 200);
     };
 
-    // Non-scroll click (desktop): show nav
-    const handleClick = () => {
-      if (!isScrolling.current) setIsVisible(true);
-    };
-
-    // Tap & hold: hide while finger is on screen, show when released
-    const handleTouchStart = () => {
-      if (!isScrolling.current) setIsVisible(false);
-    };
-    const handleTouchEnd = () => {
-      setIsVisible(true);
-    };
-
     window.addEventListener('scroll', handleScroll, { passive: true });
-    window.addEventListener('click', handleClick);
-    window.addEventListener('touchstart', handleTouchStart, { passive: true });
-    window.addEventListener('touchend', handleTouchEnd, { passive: true });
-    window.addEventListener('touchcancel', handleTouchEnd, { passive: true });
 
     const ctx = gsap.context(() => {
       ScrollTrigger.create({
@@ -84,10 +67,6 @@ const Navbar = ({ theme, toggleTheme }) => {
     });
     return () => {
       window.removeEventListener('scroll', handleScroll);
-      window.removeEventListener('click', handleClick);
-      window.removeEventListener('touchstart', handleTouchStart);
-      window.removeEventListener('touchend', handleTouchEnd);
-      window.removeEventListener('touchcancel', handleTouchEnd);
       clearTimeout(scrollStopTimer.current);
       clearTimeout(dirChangeLockTimer.current);
       ctx.revert();
@@ -96,7 +75,7 @@ const Navbar = ({ theme, toggleTheme }) => {
 
   return (
     <>
-      <nav ref={navRef} className={`fixed top-4 md:top-6 left-1/2 -translate-x-1/2 z-50 w-[95%] md:w-auto md:max-w-4xl transition-all duration-500 ease-[cubic-bezier(0.25,0.46,0.45,0.94)] px-6 md:px-8 py-3 md:py-4 rounded-full flex items-center justify-between md:gap-16 bg-background/60 backdrop-blur-xl border border-textMain/10 shadow-lg ${isVisible ? 'translate-y-0 opacity-100' : '-translate-y-[250%] opacity-0 pointer-events-none'}`}>
+      <nav ref={navRef} onTouchStart={(e) => e.stopPropagation()} className={`fixed top-4 md:top-6 left-1/2 -translate-x-1/2 z-50 w-[95%] md:w-auto md:max-w-4xl transition-all duration-500 ease-[cubic-bezier(0.25,0.46,0.45,0.94)] px-6 md:px-8 py-3 md:py-4 rounded-full flex items-center justify-between md:gap-16 bg-background/60 backdrop-blur-xl border border-textMain/10 shadow-lg ${isVisible ? 'translate-y-0 opacity-100' : '-translate-y-[250%] opacity-0 pointer-events-none'}`}>
         <div className="font-heading font-bold text-lg md:text-xl tracking-tight uppercase tracking-wider text-accent">The Creative Genius</div>
         <div className="hidden md:flex items-center gap-8 font-heading text-sm font-medium">
           <a href="https://www.youtube.com/@TheCreativeGenius" target="_blank" rel="noreferrer" className="hover:text-accent transition-colors">Podcast</a>
@@ -118,7 +97,7 @@ const Navbar = ({ theme, toggleTheme }) => {
       </nav>
       {/* Mobile Menu Overlay */}
       <div 
-        className={`fixed inset-0 bg-background/95 backdrop-blur-md z-40 transition-all duration-300 md:hidden flex flex-col items-center justify-center gap-8 ${mobileMenuOpen && isVisible ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'}`}
+        className={`fixed inset-0 bg-background/95 backdrop-blur-md z-40 transition-all duration-300 md:hidden flex flex-col items-center justify-center gap-8 ${mobileMenuOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'}`}
         onClick={() => setMobileMenuOpen(false)}
       >
         <div className="flex flex-col items-center justify-center gap-8" onClick={(e) => e.stopPropagation()}>
