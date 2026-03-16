@@ -84,9 +84,9 @@ const Navbar = ({ theme, toggleTheme }) => {
       <nav ref={navRef} className={`fixed top-4 md:top-6 left-1/2 -translate-x-1/2 z-50 w-[95%] md:w-auto md:max-w-4xl transition-all duration-500 ease-[cubic-bezier(0.25,0.46,0.45,0.94)] px-6 md:px-8 py-3 md:py-4 rounded-full flex items-center justify-between md:gap-16 bg-background/60 backdrop-blur-xl border border-textMain/10 shadow-lg ${isVisible ? 'translate-y-0 opacity-100' : '-translate-y-[250%] opacity-0 pointer-events-none'}`}>
         <div className="font-heading font-bold text-lg md:text-xl tracking-tight uppercase tracking-wider text-accent">The Creative Genius</div>
         <div className="hidden md:flex items-center gap-8 font-heading text-sm font-medium">
-          <a href="#podcast" className="hover:text-accent transition-colors">Podcast</a>
+          <a href="https://www.youtube.com/@TheCreativeGenius" target="_blank" rel="noreferrer" className="hover:text-accent transition-colors">Podcast</a>
           <a href="#events" className="hover:text-accent transition-colors">Events</a>
-          <a href="#music" className="hover:text-accent transition-colors">Music</a>
+          <a href="#contact" className="hover:text-accent transition-colors">Contact</a>
         </div>
         <div className="flex items-center gap-2 md:gap-4">
           <button 
@@ -107,12 +107,12 @@ const Navbar = ({ theme, toggleTheme }) => {
         onClick={() => setMobileMenuOpen(false)}
       >
         <div className="flex flex-col items-center justify-center gap-8" onClick={(e) => e.stopPropagation()}>
-          <a href="#podcast" onClick={() => setMobileMenuOpen(false)} className="font-heading text-2xl text-textMain hover:text-accent">Podcast</a>
+          <a href="https://www.youtube.com/@TheCreativeGenius" target="_blank" rel="noreferrer" onClick={() => setMobileMenuOpen(false)} className="font-heading text-2xl text-textMain hover:text-accent">Podcast</a>
           <a href="#events" onClick={() => setMobileMenuOpen(false)} className="font-heading text-2xl text-textMain hover:text-accent">Events</a>
-          <a href="#music" onClick={() => setMobileMenuOpen(false)} className="font-heading text-2xl text-textMain hover:text-accent">Music</a>
-          <button className="btn-accent text-lg py-3 px-8 mt-4" onClick={() => setMobileMenuOpen(false)}>
+          <a href="#contact" onClick={() => setMobileMenuOpen(false)} className="font-heading text-2xl text-textMain hover:text-accent">Contact</a>
+          <a href="https://www.youtube.com/@TheCreativeGenius" target="_blank" rel="noreferrer" onClick={() => setMobileMenuOpen(false)} className="btn-accent text-lg py-3 px-8 mt-4 inline-block text-center">
             <span>Subscribe Now</span>
-          </button>
+          </a>
         </div>
       </div>
     </>
