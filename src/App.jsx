@@ -11,22 +11,72 @@ const Navbar = ({ theme, toggleTheme }) => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [isVisible, setIsVisible] = useState(true);
   
+  const lastScrollY = useRef(window.scrollY);
+  const lastScrollDir = useRef(null); // 'up' | 'down'
+  const isScrolling = useRef(false);
+  const scrollTimer = useRef(null);
+  const autoHideTimer = useRef(null);
+
+  const showNavFor1s = () => {
+    setIsVisible(true);
+    clearTimeout(autoHideTimer.current);
+    autoHideTimer.current = setTimeout(() => {
+      // Only auto-hide if we're not actively scrolling
+      if (!isScrolling.current) {
+        setIsVisible(false);
+      }
+    }, 1000);
+  };
+
   useEffect(() => {
     const handleScroll = () => {
-      if (window.scrollY > 50) {
-        setIsVisible(false);
-        // Optional: close mobile menu on scroll, but keeping it per request logic
-      } else {
+      const currentY = window.scrollY;
+      const diff = currentY - lastScrollY.current;
+      if (Math.abs(diff) < 2) return; // ignore tiny jitter
+
+      const newDir = diff > 0 ? 'down' : 'up';
+
+      if (newDir !== lastScrollDir.current) {
+        // Direction changed — show for 1s flash then hide again
         setIsVisible(true);
+        clearTimeout(autoHideTimer.current);
+        autoHideTimer.current = setTimeout(() => {
+          setIsVisible(false);
+        }, 1000);
+      } else {
+        // Same direction, keep it hidden
+        setIsVisible(false);
+        clearTimeout(autoHideTimer.current);
+      }
+
+      lastScrollDir.current = newDir;
+      lastScrollY.current = currentY;
+
+      // Mark as actively scrolling
+      isScrolling.current = true;
+      clearTimeout(scrollTimer.current);
+      scrollTimer.current = setTimeout(() => {
+        isScrolling.current = false;
+      }, 200);
+    };
+
+    // Non-scroll interactions: show for 1s
+    const handlePointer = () => {
+      if (!isScrolling.current) {
+        showNavFor1s();
       }
     };
 
-    const handleClick = () => {
-      setIsVisible(true);
+    const handleTouch = () => {
+      if (!isScrolling.current) {
+        showNavFor1s();
+      }
     };
 
     window.addEventListener('scroll', handleScroll, { passive: true });
-    window.addEventListener('click', handleClick);
+    window.addEventListener('click', handlePointer);
+    window.addEventListener('pointermove', handlePointer);
+    window.addEventListener('touchstart', handleTouch, { passive: true });
 
     const ctx = gsap.context(() => {
       ScrollTrigger.create({
@@ -37,7 +87,11 @@ const Navbar = ({ theme, toggleTheme }) => {
     });
     return () => {
       window.removeEventListener('scroll', handleScroll);
-      window.removeEventListener('click', handleClick);
+      window.removeEventListener('click', handlePointer);
+      window.removeEventListener('pointermove', handlePointer);
+      window.removeEventListener('touchstart', handleTouch);
+      clearTimeout(scrollTimer.current);
+      clearTimeout(autoHideTimer.current);
       ctx.revert();
     };
   }, []);
