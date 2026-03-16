@@ -47,15 +47,12 @@ const Navbar = ({ theme, toggleTheme }) => {
       lastScrollDir.current = newDir;
       lastScrollY.current = currentY;
 
-      // Scroll stop timer
+      // Scroll stop timer — show nav on all devices when scrolling stops
       clearTimeout(scrollStopTimer.current);
       scrollStopTimer.current = setTimeout(() => {
         isScrolling.current = false;
         lastScrollDir.current = null;
-        // On desktop only: auto-show nav after scroll stops
-        if (window.innerWidth > 768 && !('ontouchstart' in window)) {
-          setIsVisible(true);
-        }
+        setIsVisible(true);
       }, 200);
     };
 
