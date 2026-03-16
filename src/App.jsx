@@ -148,7 +148,10 @@ const Hero = () => {
     <section ref={containerRef} className="relative h-[100dvh] w-full overflow-hidden flex items-end pb-24 px-8 md:px-24">
       <div className="absolute inset-0 z-0">
         <img src={kigaliBg} alt="Aerial view of Kigali Rwanda" className="w-full h-full object-cover opacity-80" />
+        {/* Bottom gradient: fades into page background */}
         <div className="absolute inset-0 bg-gradient-to-t from-background via-background/80 to-transparent"></div>
+        {/* Top gradient: darkens sky area so navbar is always readable */}
+        <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-transparent to-transparent"></div>
       </div>
       
       <div className="relative z-10 max-w-4xl">
