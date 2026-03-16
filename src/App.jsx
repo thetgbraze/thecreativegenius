@@ -96,7 +96,7 @@ const Navbar = ({ theme, toggleTheme }) => {
               : <Moon size={20} className="text-textMain" />
             }
           </button>
-          <button className={`md:hidden p-2 rounded-full transition-colors ${theme === 'light' ? 'bg-white shadow-md hover:bg-white/80' : 'hover:bg-white/10'}`} onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>
+          <button className="md:hidden p-2 rounded-full transition-colors hover:bg-black/10" onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>
             <Menu size={20} className="text-textMain" />
           </button>
         </div>
