@@ -156,8 +156,8 @@ const Hero = () => {
       
       <div className="relative z-10 max-w-4xl">
         <h1 className="flex flex-col gap-2">
-          <span className="hero-text font-heading font-bold text-4xl md:text-6xl text-textMain tracking-tight">Fuel the grind.</span>
-          <span className="hero-text font-drama italic text-6xl md:text-[9rem] text-accent leading-none tracking-tight -ml-2">Focus is superpower.</span>
+        <span className="hero-text font-heading font-bold text-4xl md:text-6xl text-textMain tracking-tight">Fuel the grind.</span>
+          <span className="hero-text font-drama italic text-6xl md:text-[9rem] text-accent font-black leading-none tracking-tight -ml-2" style={{textShadow:'0 2px 30px rgba(230,59,46,0.4)'}}>Focus is superpower.</span>
         </h1>
         <p className="hero-text font-data text-textMain/70 mt-6 max-w-2xl text-sm md:text-base leading-relaxed">
           The Creative Genius is a backstage pass to real stories, focused hustle, and unfiltered growth. Where purpose meets process.
@@ -193,7 +193,7 @@ const FeaturePodcastCard = () => {
   }, []);
 
   return (
-    <div id="podcast" className="bg-surfaceCard border border-textMain/10 rounded-[2rem] p-8 h-[380px] relative overflow-hidden flex flex-col items-center justify-center shadow-lg">
+    <div id="podcast" onClick={() => window.open('https://www.youtube.com/@TheCreativeGenius','_blank')} className="bg-surfaceCard border border-textMain/10 rounded-[2rem] p-8 h-[380px] relative overflow-hidden flex flex-col items-center justify-center shadow-lg cursor-pointer group">
       <div className="absolute top-8 left-8">
         <h3 className="font-heading font-bold text-lg text-textMain">Podcast</h3>
         <p className="font-data text-xs text-accent mt-2 uppercase tracking-widest">Diagnostic Shuffler</p>
@@ -268,63 +268,50 @@ const FeatureEventsCard = () => {
   );
 };
 
-const FeatureMusicCard = () => {
-  const days = ['S', 'M', 'T', 'W', 'T', 'F', 'S'];
-  const [activeDay, setActiveDay] = useState(null);
-  const cursorRef = useRef(null);
-  
-  useEffect(() => {
-    const ctx = gsap.context(() => {
-      const tl = gsap.timeline({ repeat: -1, repeatDelay: 1 });
-      
-      tl.to(cursorRef.current, {
-        x: 130, y: 75, duration: 1, ease: "power2.inOut"
-      });
-      tl.to(cursorRef.current, { scale: 0.8, duration: 0.1 });
-      tl.add(() => setActiveDay(3));
-      tl.to(cursorRef.current, { scale: 1, duration: 0.1 });
-      
-      tl.to(cursorRef.current, {
-        x: 70, y: 160, duration: 1, delay: 0.5, ease: "power2.inOut"
-      });
-      tl.to(cursorRef.current, { scale: 0.8, duration: 0.1 });
-      tl.to(cursorRef.current, { scale: 1, duration: 0.1 });
-      
-      tl.to(cursorRef.current, {
-        x: -50, y: -50, duration: 1, delay: 0.5,
-        onStart: () => setActiveDay(null)
-      });
-    });
-    return () => ctx.revert();
-  }, []);
+const ContactCard = () => {
+  const [form, setForm] = useState({ email: '', message: '' });
+  const [sent, setSent] = useState(false);
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    setSent(true);
+    setTimeout(() => setSent(false), 3000);
+    setForm({ email: '', message: '' });
+  };
 
   return (
-    <div id="music" className="bg-surfaceCard border border-textMain/10 rounded-[2rem] p-8 h-[380px] relative overflow-hidden flex flex-col justify-between shadow-lg">
+    <div id="contact" className="bg-surfaceCard border border-textMain/10 rounded-[2rem] p-8 h-[380px] relative overflow-hidden flex flex-col justify-between shadow-lg">
       <div>
-        <h3 className="font-heading font-bold text-lg text-textMain">Music</h3>
-        <p className="font-data text-xs text-accent mt-2 uppercase tracking-widest">Protocol Scheduler</p>
+        <h3 className="font-heading font-bold text-lg text-textMain">Contact Us</h3>
+        <p className="font-data text-xs text-accent mt-2 uppercase tracking-widest">Get In Touch</p>
       </div>
-      
-      <div className="relative w-full flex-1 flex flex-col justify-center items-center select-none pt-4">
-        <div className="flex gap-2 mb-10 relative">
-          {days.map((d, i) => (
-            <div 
-              key={i} 
-              className={`w-8 h-8 rounded-lg flex items-center justify-center font-data text-xs border transition-colors duration-300 ${activeDay === i ? 'bg-accent/10 border-accent/50 text-textMain shadow-[0_0_10px_rgba(230,59,46,0.2)]' : 'bg-background/50 text-textMain/40 border-textMain/10'}`}
-            >
-              {d}
-            </div>
-          ))}
-          
-          <div ref={cursorRef} className="absolute -left-10 -top-10 z-20 pointer-events-none drop-shadow-md">
-            <MousePointer2 size={24} className="text-textMain fill-black dark:fill-white" />
-          </div>
+      {sent ? (
+        <div className="flex-1 flex items-center justify-center">
+          <p className="font-heading text-accent text-lg font-bold">Message sent! ✓</p>
         </div>
-        
-        <div className={`px-6 py-2 rounded-full border text-xs font-heading font-medium transition-colors duration-300 ${activeDay !== null ? 'bg-accent text-white border-accent' : 'bg-background border-textMain/10 text-textMain/50'}`}>
-          Confirm Drop Date
-        </div>
-      </div>
+      ) : (
+        <form onSubmit={handleSubmit} className="flex flex-col gap-4 mt-4 flex-1 justify-center">
+          <input
+            type="email"
+            required
+            placeholder="Your email"
+            value={form.email}
+            onChange={e => setForm(f => ({ ...f, email: e.target.value }))}
+            className="w-full bg-background border border-textMain/10 rounded-xl px-4 py-2 font-heading text-sm text-textMain placeholder:text-textMain/30 focus:outline-none focus:border-accent transition-colors"
+          />
+          <textarea
+            required
+            placeholder="Your message..."
+            value={form.message}
+            onChange={e => setForm(f => ({ ...f, message: e.target.value }))}
+            rows={3}
+            className="w-full bg-background border border-textMain/10 rounded-xl px-4 py-2 font-heading text-sm text-textMain placeholder:text-textMain/30 focus:outline-none focus:border-accent transition-colors resize-none"
+          />
+          <button type="submit" className="btn-accent py-2 px-6 text-sm self-start">
+            <span>Send Message</span>
+          </button>
+        </form>
+      )}
     </div>
   );
 };
@@ -335,7 +322,7 @@ const Features = () => {
       <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8">
         <FeaturePodcastCard />
         <FeatureEventsCard />
-        <FeatureMusicCard />
+        <ContactCard />
       </div>
     </section>
   );
@@ -387,13 +374,13 @@ const Protocol = () => {
         if (i === cards.length - 1) return;
         
         gsap.to(card, {
-          scale: 0.9,
-          opacity: 0.5,
-          filter: 'blur(20px)',
+          scale: 0.95,
+          opacity: 0.6,
+          filter: 'blur(4px)',
           scrollTrigger: {
             trigger: cards[i + 1],
-            start: 'top bottom',
-            end: 'top top',
+            start: 'top 80%',
+            end: 'top 20%',
             scrub: true,
           }
         });
@@ -462,9 +449,9 @@ const CTA = () => {
           <a href="https://www.youtube.com/@TheCreativeGenius" target="_blank" rel="noreferrer" className="btn-accent text-lg px-8 py-4 w-full md:w-auto">
             <span>Subscribe Now</span>
           </a>
-          <button className="bg-transparent border border-textMain/20 hover:border-textMain/50 text-textMain font-heading font-medium rounded-full text-lg px-8 py-4 transition-colors">
+          <a href="https://www.youtube.com/@TheCreativeGenius" target="_blank" rel="noreferrer" className="bg-transparent border border-textMain/20 hover:border-textMain/50 text-textMain font-heading font-medium rounded-full text-lg px-8 py-4 transition-colors text-center">
             Support the Team
-          </button>
+          </a>
         </div>
     </section>
   );
@@ -505,7 +492,11 @@ const Footer = () => {
       
       <div className="max-w-7xl mx-auto pt-8 border-t border-textMain/10 text-center md:text-left flex flex-col md:flex-row justify-between items-center text-xs font-data text-textMain/50">
         <p>© 2026 The Creative Genius. All rights reserved.</p>
-        <p className="mt-4 md:mt-0 uppercase tracking-widest">built by braze.inc with a raw precision</p>
+        <p className="mt-4 md:mt-0 uppercase tracking-widest">
+          <span className="text-accent">built by </span>
+          <span>braze.inc</span>
+          <span className="text-accent"> with a raw precision</span>
+        </p>
       </div>
     </footer>
   );
