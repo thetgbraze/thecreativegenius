@@ -47,13 +47,15 @@ const Navbar = ({ theme, toggleTheme }) => {
         </div>
       </nav>
       {/* Mobile Menu Overlay */}
-      <div className={`fixed inset-0 bg-background/95 backdrop-blur-md z-40 transition-opacity duration-300 md:hidden flex flex-col items-center justify-center gap-8 ${mobileMenuOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'}`}>
-        <a href="#podcast" onClick={() => setMobileMenuOpen(false)} className="font-heading text-2xl text-textMain hover:text-accent">Podcast</a>
-        <a href="#events" onClick={() => setMobileMenuOpen(false)} className="font-heading text-2xl text-textMain hover:text-accent">Events</a>
-        <a href="#music" onClick={() => setMobileMenuOpen(false)} className="font-heading text-2xl text-textMain hover:text-accent">Music</a>
-        <button className="btn-accent text-lg py-3 px-8 mt-4" onClick={() => setMobileMenuOpen(false)}>
-          <span>Subscribe Now</span>
-        </button>
+      <div 
+        className={`fixed inset-0 bg-background/95 backdrop-blur-md z-40 transition-opacity duration-300 md:hidden flex flex-col items-center justify-center gap-8 ${mobileMenuOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'}`}
+        onClick={() => setMobileMenuOpen(false)}
+      >
+        <div className="flex flex-col items-center justify-center gap-8" onClick={(e) => e.stopPropagation()}>
+          <a href="#podcast" onClick={() => setMobileMenuOpen(false)} className="font-heading text-2xl text-textMain hover:text-accent">Podcast</a>
+          <a href="#events" onClick={() => setMobileMenuOpen(false)} className="font-heading text-2xl text-textMain hover:text-accent">Events</a>
+          <a href="#music" onClick={() => setMobileMenuOpen(false)} className="font-heading text-2xl text-textMain hover:text-accent">Music</a>
+        </div>
       </div>
     </>
   );
