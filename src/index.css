@@ -1,0 +1,71 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Space+Grotesk:wght@300..700&family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* Dark Mode (Default) Brutalist Signal */
+    --color-bg: #0A0A0A; /* Deep Black */
+    --color-primary: #1A1A1A; /* Charcoal Surface */
+    --color-accent: #E63B2E; /* Signal Red */
+    --color-text-main: #F5F3EE; /* Off-white */
+    --color-surface-card: #151515; /* Slightly lighter than bg */
+  }
+
+  .light {
+    /* Light Mode Brutalist Signal */
+    --color-bg: #F5F3EE; /* Off-white */
+    --color-primary: #E8E4DD; /* Paper */
+    --color-accent: #E63B2E; /* Signal Red */
+    --color-text-main: #111111; /* Black */
+    --color-surface-card: #FFFFFF; /* Pure white surface */
+  }
+
+  body {
+    @apply bg-background text-textMain font-heading overflow-x-hidden antialiased;
+    transition: background-color 0.5s ease, color 0.5s ease;
+  }
+}
+
+@layer utilities {
+  .noise-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    pointer-events: none;
+    z-index: 9999;
+    opacity: 0.05;
+    mix-blend-mode: overlay;
+  }
+
+  .btn-accent {
+    @apply relative overflow-hidden bg-accent text-white font-heading font-medium rounded-full inline-flex items-center justify-center transition-all duration-500 hover:-translate-y-[1px];
+    transform-style: preserve-3d;
+  }
+
+  .btn-accent::before {
+    content: '';
+    @apply absolute inset-0 bg-white/20 translate-y-[100%] transition-transform duration-500 ease-[cubic-bezier(0.25,0.46,0.45,0.94)];
+  }
+
+  .btn-accent:hover::before {
+    @apply translate-y-0;
+  }
+
+  .btn-accent:hover {
+    transform: scale(1.03) translateY(-1px);
+    box-shadow: 0 10px 30px -10px var(--color-accent);
+  }
+  
+  .spin-slow {
+    animation: spin 8s linear infinite;
+  }
+  
+  .animation-reverse {
+    animation-direction: reverse;
+  }
+}
