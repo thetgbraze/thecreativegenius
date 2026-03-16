@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { ArrowRight, MousePointer2, Mic2, ActivityIcon, Sun, Moon, Menu } from 'lucide-react';
+import heroBg from './assets/hero.png';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -86,7 +87,7 @@ const Hero = () => {
   return (
     <section ref={containerRef} className="relative h-[100dvh] w-full overflow-hidden flex items-end pb-24 px-8 md:px-24">
       <div className="absolute inset-0 z-0">
-        <img src="https://images.unsplash.com/photo-1506526620955-4c07da33895e?q=80&w=2574&auto=format&fit=crop" alt="Hero background" className="w-full h-full object-cover grayscale opacity-80" />
+        <img src={heroBg} alt="Hero background" className="w-full h-full object-cover grayscale opacity-80" />
         <div className="absolute inset-0 bg-gradient-to-t from-background via-background/80 to-transparent"></div>
       </div>
       
