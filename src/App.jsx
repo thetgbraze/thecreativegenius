@@ -1,12 +1,13 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { ArrowRight, MousePointer2, Mic2, ActivityIcon, Sun, Moon } from 'lucide-react';
+import { ArrowRight, MousePointer2, Mic2, ActivityIcon, Sun, Moon, Menu } from 'lucide-react';
 
 gsap.registerPlugin(ScrollTrigger);
 
 const Navbar = ({ theme, toggleTheme }) => {
   const navRef = useRef(null);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   
   useEffect(() => {
     const ctx = gsap.context(() => {
@@ -20,26 +21,40 @@ const Navbar = ({ theme, toggleTheme }) => {
   }, []);
 
   return (
-    <nav ref={navRef} className="fixed top-6 left-1/2 -translate-x-1/2 z-50 transition-all duration-500 ease-[cubic-bezier(0.25,0.46,0.45,0.94)] px-8 py-4 rounded-full flex items-center gap-12 text-background mix-blend-difference [&.nav-scrolled]:mix-blend-normal [&.nav-scrolled]:bg-background/10 [&.nav-scrolled]:backdrop-blur-xl [&.nav-scrolled]:border [&.nav-scrolled]:border-textMain/10 [&.nav-scrolled]:text-textMain">
-      <div className="font-heading font-bold text-xl tracking-tight uppercase tracking-wider">The Creative Genius</div>
-      <div className="hidden md:flex items-center gap-8 font-heading text-sm font-medium">
-        <a href="#podcast" className="hover:text-accent transition-colors">Podcast</a>
-        <a href="#events" className="hover:text-accent transition-colors">Events</a>
-        <a href="#music" className="hover:text-accent transition-colors">Music</a>
-      </div>
-      <div className="flex items-center gap-4">
-        <button 
-          onClick={toggleTheme} 
-          className="p-2 rounded-full hover:bg-black/10 dark:hover:bg-white/10 transition-colors"
-          aria-label="Toggle Theme"
-        >
-          {theme === 'dark' ? <Sun size={20} className="text-textMain" /> : <Moon size={20} className="text-textMain" />}
-        </button>
-        <button className="btn-accent hidden md:flex text-sm py-2 px-5">
+    <>
+      <nav ref={navRef} className="fixed top-4 md:top-6 left-1/2 -translate-x-1/2 z-50 w-[95%] md:w-auto max-w-7xl transition-all duration-500 ease-[cubic-bezier(0.25,0.46,0.45,0.94)] px-6 md:px-8 py-3 md:py-4 rounded-full flex items-center justify-between md:justify-center gap-4 md:gap-12 text-background mix-blend-difference [&.nav-scrolled]:mix-blend-normal [&.nav-scrolled]:bg-background/10 [&.nav-scrolled]:backdrop-blur-xl [&.nav-scrolled]:border [&.nav-scrolled]:border-textMain/10 [&.nav-scrolled]:text-textMain">
+        <div className="font-heading font-bold text-lg md:text-xl tracking-tight uppercase tracking-wider">The Creative Genius</div>
+        <div className="hidden md:flex items-center gap-8 font-heading text-sm font-medium">
+          <a href="#podcast" className="hover:text-accent transition-colors">Podcast</a>
+          <a href="#events" className="hover:text-accent transition-colors">Events</a>
+          <a href="#music" className="hover:text-accent transition-colors">Music</a>
+        </div>
+        <div className="flex items-center gap-2 md:gap-4">
+          <button 
+            onClick={toggleTheme} 
+            className="p-2 rounded-full hover:bg-black/10 dark:hover:bg-white/10 transition-colors"
+            aria-label="Toggle Theme"
+          >
+            {theme === 'dark' ? <Sun size={20} className="text-textMain" /> : <Moon size={20} className="text-textMain" />}
+          </button>
+          <button className="btn-accent hidden md:flex text-sm py-2 px-5">
+            <span>Subscribe Now</span>
+          </button>
+          <button className="md:hidden p-2 rounded-full" onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>
+            <Menu size={20} className="text-textMain" />
+          </button>
+        </div>
+      </nav>
+      {/* Mobile Menu Overlay */}
+      <div className={`fixed inset-0 bg-background/95 backdrop-blur-md z-40 transition-opacity duration-300 md:hidden flex flex-col items-center justify-center gap-8 ${mobileMenuOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'}`}>
+        <a href="#podcast" onClick={() => setMobileMenuOpen(false)} className="font-heading text-2xl text-textMain hover:text-accent">Podcast</a>
+        <a href="#events" onClick={() => setMobileMenuOpen(false)} className="font-heading text-2xl text-textMain hover:text-accent">Events</a>
+        <a href="#music" onClick={() => setMobileMenuOpen(false)} className="font-heading text-2xl text-textMain hover:text-accent">Music</a>
+        <button className="btn-accent text-lg py-3 px-8 mt-4" onClick={() => setMobileMenuOpen(false)}>
           <span>Subscribe Now</span>
         </button>
       </div>
-    </nav>
+    </>
   );
 };
 
@@ -71,7 +86,7 @@ const Hero = () => {
   return (
     <section ref={containerRef} className="relative h-[100dvh] w-full overflow-hidden flex items-end pb-24 px-8 md:px-24">
       <div className="absolute inset-0 z-0">
-        <img src="https://images.unsplash.com/photo-1518002054494-3a6f94352e9d?q=80&w=2574&auto=format&fit=crop" alt="Hero background" className="w-full h-full object-cover grayscale opacity-80" />
+        <img src="https://images.unsplash.com/photo-1516280440502-6c61f52b6515?q=80&w=2574&auto=format&fit=crop" alt="Hero background" className="w-full h-full object-cover grayscale opacity-80" />
         <div className="absolute inset-0 bg-gradient-to-t from-background via-background/80 to-transparent"></div>
       </div>
       
@@ -144,7 +159,7 @@ const FeaturePodcastCard = () => {
 
 const FeatureEventsCard = () => {
   const [text, setText] = useState("");
-  const messages = ["Live events synchronization...", "Backend production setup...", "Network expanding globally...", "Grind strictly focused."];
+  const messages = ["New podcast dropping soon...", "Check out my new podcast...", "Check out my new music..."];
   
   useEffect(() => {
     let currentMsgIdx = 0;
@@ -426,14 +441,14 @@ const Footer = () => {
       
       <div className="max-w-7xl mx-auto pt-8 border-t border-textMain/10 text-center md:text-left flex flex-col md:flex-row justify-between items-center text-xs font-data text-textMain/50">
         <p>© 2026 The Creative Genius. All rights reserved.</p>
-        <p className="mt-4 md:mt-0 uppercase tracking-widest">Constructed with raw precision</p>
+        <p className="mt-4 md:mt-0 uppercase tracking-widest">built by braze.inc with a raw precision</p>
       </div>
     </footer>
   );
 };
 
 export default function App() {
-  const [theme, setTheme] = useState('dark');
+  const [theme, setTheme] = useState('light');
 
   useEffect(() => {
     if (theme === 'light') {
