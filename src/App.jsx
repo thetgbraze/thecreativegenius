@@ -38,9 +38,6 @@ const Navbar = ({ theme, toggleTheme }) => {
           >
             {theme === 'dark' ? <Sun size={20} className="text-textMain" /> : <Moon size={20} className="text-textMain" />}
           </button>
-          <button className="btn-accent hidden md:flex text-sm py-2 px-5">
-            <span>Subscribe Now</span>
-          </button>
           <button className="md:hidden p-2 rounded-full" onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>
             <Menu size={20} className="text-textMain" />
           </button>
@@ -55,6 +52,9 @@ const Navbar = ({ theme, toggleTheme }) => {
           <a href="#podcast" onClick={() => setMobileMenuOpen(false)} className="font-heading text-2xl text-textMain hover:text-accent">Podcast</a>
           <a href="#events" onClick={() => setMobileMenuOpen(false)} className="font-heading text-2xl text-textMain hover:text-accent">Events</a>
           <a href="#music" onClick={() => setMobileMenuOpen(false)} className="font-heading text-2xl text-textMain hover:text-accent">Music</a>
+          <button className="btn-accent text-lg py-3 px-8 mt-4" onClick={() => setMobileMenuOpen(false)}>
+            <span>Subscribe Now</span>
+          </button>
         </div>
       </div>
     </>
