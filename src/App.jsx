@@ -23,8 +23,8 @@ const Navbar = ({ theme, toggleTheme }) => {
 
   return (
     <>
-      <nav ref={navRef} className="fixed top-4 md:top-6 left-1/2 -translate-x-1/2 z-50 w-[95%] md:w-auto max-w-7xl transition-all duration-500 ease-[cubic-bezier(0.25,0.46,0.45,0.94)] px-6 md:px-8 py-3 md:py-4 rounded-full flex items-center justify-between md:justify-center gap-4 md:gap-12 text-background dark:text-white mix-blend-difference [&.nav-scrolled]:mix-blend-normal [&.nav-scrolled]:bg-background/10 [&.nav-scrolled]:backdrop-blur-xl [&.nav-scrolled]:border [&.nav-scrolled]:border-textMain/10 [&.nav-scrolled]:text-textMain">
-        <div className="font-heading font-bold text-lg md:text-xl tracking-tight uppercase tracking-wider text-accent mix-blend-normal">The Creative Genius</div>
+      <nav ref={navRef} className="fixed top-4 md:top-6 left-1/2 -translate-x-1/2 z-50 w-[95%] md:w-auto max-w-7xl transition-all duration-500 ease-[cubic-bezier(0.25,0.46,0.45,0.94)] px-6 md:px-8 py-3 md:py-4 rounded-full flex items-center justify-between md:justify-center gap-4 md:gap-12 text-textMain [&.nav-scrolled]:bg-background/10 [&.nav-scrolled]:backdrop-blur-xl [&.nav-scrolled]:border [&.nav-scrolled]:border-textMain/10">
+        <div className="font-heading font-bold text-lg md:text-xl tracking-tight uppercase tracking-wider text-accent">The Creative Genius</div>
         <div className="hidden md:flex items-center gap-8 font-heading text-sm font-medium">
           <a href="#podcast" className="hover:text-accent transition-colors">Podcast</a>
           <a href="#events" className="hover:text-accent transition-colors">Events</a>
