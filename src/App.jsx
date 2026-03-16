@@ -93,10 +93,10 @@ const Navbar = ({ theme, toggleTheme }) => {
           >
             {theme === 'dark' 
               ? <Sun size={20} className="text-textMain" /> 
-              : <Moon size={20} className="text-textMain" strokeWidth={2.5} />
+              : <Moon size={20} className="text-textMain" />
             }
           </button>
-          <button className="md:hidden p-2 rounded-full" onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>
+          <button className={`md:hidden p-2 rounded-full transition-colors ${theme === 'light' ? 'bg-white shadow-md hover:bg-white/80' : 'hover:bg-white/10'}`} onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>
             <Menu size={20} className="text-textMain" />
           </button>
         </div>
