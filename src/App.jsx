@@ -56,16 +56,24 @@ const Navbar = ({ theme, toggleTheme }) => {
       }, 200);
     };
 
-    // Non-scroll interaction while nav is hidden → show it, stays visible until scroll
-    const handleInteraction = () => {
-      if (!isScrolling.current) {
-        setIsVisible(true);
-      }
+    // Non-scroll click (desktop): show nav
+    const handleClick = () => {
+      if (!isScrolling.current) setIsVisible(true);
+    };
+
+    // Tap & hold: hide while finger is on screen, show when released
+    const handleTouchStart = () => {
+      if (!isScrolling.current) setIsVisible(false);
+    };
+    const handleTouchEnd = () => {
+      setIsVisible(true);
     };
 
     window.addEventListener('scroll', handleScroll, { passive: true });
-    window.addEventListener('click', handleInteraction);
-    window.addEventListener('touchstart', handleInteraction, { passive: true });
+    window.addEventListener('click', handleClick);
+    window.addEventListener('touchstart', handleTouchStart, { passive: true });
+    window.addEventListener('touchend', handleTouchEnd, { passive: true });
+    window.addEventListener('touchcancel', handleTouchEnd, { passive: true });
 
     const ctx = gsap.context(() => {
       ScrollTrigger.create({
@@ -76,8 +84,10 @@ const Navbar = ({ theme, toggleTheme }) => {
     });
     return () => {
       window.removeEventListener('scroll', handleScroll);
-      window.removeEventListener('click', handleInteraction);
-      window.removeEventListener('touchstart', handleInteraction);
+      window.removeEventListener('click', handleClick);
+      window.removeEventListener('touchstart', handleTouchStart);
+      window.removeEventListener('touchend', handleTouchEnd);
+      window.removeEventListener('touchcancel', handleTouchEnd);
       clearTimeout(scrollStopTimer.current);
       clearTimeout(dirChangeLockTimer.current);
       ctx.revert();
